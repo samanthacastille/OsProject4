@@ -7,12 +7,12 @@ public class Main {
 
     public static void main(String[] args) {
 
-        System.out.println("Which ");
+        System.out.println("Which would you prefer? (1/2/3)");
         int domains = getRandom(3,8);
         int objects = getRandom(3,8);
         String[][] matrix = createMatrix(domains, objects);
 
-        for (int i=0; i<domains;i++) {
+        for (int i=0; i<domains; i++) {
             DomainThread thread = new DomainThread(matrix);
             thread.start();
         }
@@ -75,7 +75,7 @@ class DomainThread extends Thread {
     @Override
     public void run() {
         System.out.println(Thread.currentThread().getName() + " in control");
-        for (int i =0; i<matrix.length; i++)  {
+        for (int i=0; i<matrix.length; i++)  {
             System.out.println(Arrays.toString(matrix[i]));
         }
         yieldMultipleTimes();
