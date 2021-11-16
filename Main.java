@@ -2,20 +2,23 @@ package com.main;
 
 import com.main.AccessMatrix.AccessMatrix;
 
+import java.io.IOException;
 import java.util.Scanner;
 
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         int protectionSolution = getUserProtectionSolution();
 
         switch (protectionSolution) {
             case (1) -> {
                 System.out.println("You chose to implement protection using an access matrix.");
                 int domains = getRandom(3, 8);
-                AccessMatrix accessMatrix = new AccessMatrix(domains, getRandom(3, 8));
+                int objects = getRandom(3, 8);
+                AccessMatrix accessMatrix = new AccessMatrix(domains, objects);
                 int[][] matrix = accessMatrix.createMatrix();
-                accessMatrix.forkThreads(domains ,matrix);
+                String[] filePathList = accessMatrix.createFile();
+                accessMatrix.forkThreads(domains ,matrix, filePathList);
             }
             case (2) -> {
                 System.out.println("You chose to implement protection using an access list for objects.");

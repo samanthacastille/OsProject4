@@ -4,11 +4,13 @@ public class AccessMatrixThread extends Thread {
     int[][] matrix;
     int domains;
     int objects;
+    String filePathList[];
 
-    public AccessMatrixThread(int[][] matrix, int domains, int objects) {
+    public AccessMatrixThread(int[][] matrix, int domains, int objects, String filePathList[]) {
         this.matrix = matrix;
         this.domains = domains;
         this.objects = objects;
+        this.filePathList = filePathList;
     }
 
     @Override
