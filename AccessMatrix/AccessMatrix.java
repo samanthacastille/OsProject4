@@ -46,6 +46,7 @@ public class AccessMatrix {
         for (int[] strings : matrix) {
             System.out.println(Arrays.toString(strings));
         }
+        System.out.println();
         return matrix;
     }
 
