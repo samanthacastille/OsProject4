@@ -24,6 +24,8 @@ public class AccessMatrix {
      */
     public int[][] createMatrix() {
         System.out.println("An access matrix with " + domains + " domains and " + objects +  " objects is being created!");
+        System.out.println("\nFor the File objects, permissions are:\n1 - Read\n2 - Write\n3 - Read/Write\n4 - None\n\n"
+                + "For the domain switching, permissions are:\n0 - Already in that domain\n1 - Allowed\n2 - Not Allowed\n");
         int[][] matrix = new int[domains][objects+domains];
         for (int i=0; i<domains; i++){
             for (int j = 0; j<objects+domains; j++) {
@@ -52,7 +54,8 @@ public class AccessMatrix {
 
     public void forkThreads(int numThreads, int[][] matrix) {
         for (int i = 0; i < numThreads; i++) {
-            AccessMatrixThread thread = new AccessMatrixThread(matrix);
+            AccessMatrixThread thread = new AccessMatrixThread(matrix, domains, objects);
+            thread.setName(Integer.toString(i));
             thread.start();
         }
     }
