@@ -55,7 +55,7 @@ public class AccessMatrix {
 
     public void forkThreads(int numThreads, int[][] matrix, String[] filePathsList) {
         for (int i = 0; i < numThreads; i++) {
-            AccessMatrixThread thread = new AccessMatrixThread(matrix, domains, objects,filePathsList);
+            AccessMatrixThread thread = new AccessMatrixThread(matrix, domains, objects, filePathsList);
             thread.setName(Integer.toString(i));
             thread.start();
         }

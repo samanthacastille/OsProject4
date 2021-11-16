@@ -4,9 +4,9 @@ public class AccessMatrixThread extends Thread {
     int[][] matrix;
     int domains;
     int objects;
-    String filePathList[];
+    String[] filePathList;
 
-    public AccessMatrixThread(int[][] matrix, int domains, int objects, String filePathList[]) {
+    public AccessMatrixThread(int[][] matrix, int domains, int objects, String[] filePathList) {
         this.matrix = matrix;
         this.domains = domains;
         this.objects = objects;
@@ -15,46 +15,83 @@ public class AccessMatrixThread extends Thread {
 
     @Override
     public void run() {
-        boolean accessGranted;
         int numAttempts = getRandom(1,5);
         for (int i=0; i<numAttempts; i++) {
             int objectOrDomain = getRandom(0, (objects+domains));
             if (objectOrDomain<objects) {
-                int action = getRandom(1,3);
-                if (action==1) {
-                    System.out.println("Thread " + Thread.currentThread().getName() + ": Attempting to read from object " + objectOrDomain);
-                    accessGranted = objectArbitrator(objectOrDomain, action);
-                    if (accessGranted) {
-                        System.out.println("Thread " + Thread.currentThread().getName() + ": Access granted!");
-                        read();
-                    } else {
-                        System.out.println("Thread " + Thread.currentThread().getName() + ": Access denied.");
-                    }
-                    yieldMultipleTimes();
-                } else if (action==2) {
-                    System.out.println("Thread " + Thread.currentThread().getName() + ": Attempting to write to object " + objectOrDomain);
-                    accessGranted = objectArbitrator(objectOrDomain, action);
-                    if (accessGranted) {
-                        System.out.println("Thread " + Thread.currentThread().getName() + ": Access granted!");
-                        write();
-                    } else {
-                        System.out.println("Thread " + Thread.currentThread().getName() + ": Access denied.");
-                    }
-                    yieldMultipleTimes();
-                }
+                attemptObjectAction(Integer.parseInt(Thread.currentThread().getName()), objectOrDomain);
             } else {
-                System.out.println("Thread " + Thread.currentThread().getName() + ": Attempting to switch to domain " + (objectOrDomain-objects));
-                accessGranted = domainSwitchingArbitrator(objectOrDomain);
-                if (accessGranted) {
-                    System.out.println("Thread " + Thread.currentThread().getName() + ": Access granted!");
-                    // TODO: figure out how a context switch works
-                } else {
-                    System.out.println("Thread " + Thread.currentThread().getName() + ": Access denied.");
-                }
-                yieldMultipleTimes();
+                attemptDomainSwitch(Integer.parseInt(Thread.currentThread().getName()), objectOrDomain);
             }
         }
         yieldMultipleTimes();
+    }
+
+    public void attemptObjectAction(int row, int column) {
+        boolean accessGranted;
+        int action = getRandom(1,3);
+        if (action==1) {
+            System.out.println("Thread " + Thread.currentThread().getName() + ": Attempting to read from object " + column);
+            accessGranted = objectArbitrator(row, column, action);
+            if (accessGranted) {
+                System.out.println("Thread " + Thread.currentThread().getName() + ": Access granted!");
+                read();
+            } else {
+                System.out.println("Thread " + Thread.currentThread().getName() + ": Access denied.");
+            }
+            yieldMultipleTimes();
+        } else if (action==2) {
+            System.out.println("Thread " + Thread.currentThread().getName() + ": Attempting to write to object " + column);
+            accessGranted = objectArbitrator(row, column, action);
+            if (accessGranted) {
+                System.out.println("Thread " + Thread.currentThread().getName() + ": Access granted!");
+                write();
+            } else {
+                System.out.println("Thread " + Thread.currentThread().getName() + ": Access denied.");
+            }
+            yieldMultipleTimes();
+        }
+    }
+
+    public boolean objectArbitrator(int row, int column, int action) {
+        int permission = matrix[row][column];
+        return permission == action || permission == 3;
+    }
+
+    public void read() {
+
+    }
+
+    public void write() {
+
+    }
+
+    public void attemptDomainSwitch(int row, int column) {
+        int domain = column-objects;
+        boolean accessGranted;
+        System.out.println("Thread " + Thread.currentThread().getName() + ": Attempting to switch to domain " + domain);
+        accessGranted = domainSwitchingArbitrator(column);
+        if (accessGranted) {
+            System.out.println("Thread " + Thread.currentThread().getName() + ": Access granted!");
+            switchDomain(row);
+        } else {
+            System.out.println("Thread " + Thread.currentThread().getName() + ": Access denied.");
+        }
+        yieldMultipleTimes();
+    }
+
+    public boolean domainSwitchingArbitrator(int column) {
+        int permission = matrix[Integer.parseInt(Thread.currentThread().getName())][column];
+        return permission == 1;
+    }
+
+    public void switchDomain(int row) {
+        int objectOrDomain = getRandom(0, (objects+domains));
+        if (objectOrDomain<objects) {
+            attemptObjectAction(row, objectOrDomain);
+        } else {
+            attemptDomainSwitch(row, objectOrDomain);
+        }
     }
 
     public void yieldMultipleTimes() {
@@ -67,25 +104,5 @@ public class AccessMatrixThread extends Thread {
 
     public static int getRandom(int min, int max) {
         return (int)(Math.random() * (max-min) + min);
-    }
-
-    public boolean objectArbitrator(int column, int action) {
-        int row = Integer.parseInt(Thread.currentThread().getName());
-        int permission = matrix[row][column];
-        return permission == action || permission == 3;
-    }
-
-    public boolean domainSwitchingArbitrator(int column) {
-        int row = Integer.parseInt(Thread.currentThread().getName());
-        int permission = matrix[row][column];
-        return permission == 1;
-    }
-
-    public void read() {
-
-    }
-
-    public void write() {
-
     }
 }
