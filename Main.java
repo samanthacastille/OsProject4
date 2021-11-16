@@ -1,6 +1,5 @@
 package com.main;
 
-
 import com.main.AccessMatrix.AccessMatrix;
 
 import java.util.Scanner;

@@ -1,5 +1,7 @@
 package com.main.AccessMatrix;
 
+import java.util.Arrays;
+
 public class AccessMatrix {
     private final int domains;
     private final int objects;
@@ -16,23 +18,30 @@ public class AccessMatrix {
     3 - Read/Write
     4 - None
     For the domain switching, permissions are:
+    0 - Already in that domain
     1 - Allow
     2 - Not Allowed
-    3 - Already in that domain
      */
     public int[][] createMatrix() {
-        System.out.println("Matrix is being created!");
+        System.out.println("An access matrix with " + domains + " domains and " + objects +  " objects is being created!");
         int[][] matrix = new int[domains][objects+domains];
         for (int i=0; i<domains; i++){
             for (int j = 0; j<objects+domains; j++) {
                 int permission;
                 if (j >= objects) {
-                    permission = getRandom(1, 4);
+                    if (j==objects+i) {
+                        permission = 0;
+                    } else {
+                        permission = getRandom(1, 3);
+                    }
                 } else {
                     permission = getRandom(1, 5);
                 }
                 matrix[i][j] = permission;
             }
+        }
+        for (int[] strings : matrix) {
+            System.out.println(Arrays.toString(strings));
         }
         return matrix;
     }

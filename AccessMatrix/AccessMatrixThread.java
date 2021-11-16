@@ -1,7 +1,5 @@
 package com.main.AccessMatrix;
 
-import java.util.Arrays;
-
 public class AccessMatrixThread extends Thread {
     int[][] matrix;
 
@@ -11,15 +9,12 @@ public class AccessMatrixThread extends Thread {
 
     @Override
     public void run() {
-        System.out.println(Thread.currentThread().getName() + " in control");
-        for (int[] strings : matrix) {
-            System.out.println(Arrays.toString(strings));
-        }
         yieldMultipleTimes();
     }
 
     public void yieldMultipleTimes() {
-        for (int i = 0; i<getRandom(3,8); i++) {
+        int numYields = getRandom(3,8);
+        for (int i = 0; i<numYields; i++) {
             currentThread().interrupt();
         }
     }
