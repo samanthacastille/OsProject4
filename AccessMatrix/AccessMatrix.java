@@ -1,8 +1,7 @@
 package com.main.AccessMatrix;
 
-import com.main.FileOperations;
+import com.main.ObjectOperations;
 
-import java.io.File;
 import java.util.Arrays;
 
 public class AccessMatrix {
@@ -56,9 +55,9 @@ public class AccessMatrix {
         return (int)(Math.random() * (max-min) + min);
     }
 
-    public void forkThreads(int numThreads, int[][] matrix, FileOperations fileOperations, String[] filePathsList) {
+    public void forkThreads(int numThreads, int[][] matrix, ObjectOperations fileOperations, String[][] objectList) {
         for (int i = 0; i < numThreads; i++) {
-            AccessMatrixThread thread = new AccessMatrixThread(matrix, domains, objects, fileOperations, filePathsList);
+            AccessMatrixThread thread = new AccessMatrixThread(matrix, domains, objects, fileOperations, objectList);
             thread.setName(Integer.toString(i));
             thread.start();
         }

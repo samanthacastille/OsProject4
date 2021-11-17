@@ -1,20 +1,20 @@
 package com.main.AccessMatrix;
 
-import com.main.FileOperations;
+import com.main.ObjectOperations;
 
 public class AccessMatrixThread extends Thread {
     private int[][] matrix;
     private final int domains;
     private final int objects;
-    private final FileOperations fileOperations;
-    private final String[] filePathList;
+    private final ObjectOperations fileOperations;
+    private final String[][] objectList;
 
-    public AccessMatrixThread(int[][] matrix, int domains, int objects, FileOperations fileOperations, String[] filePathList) {
+    public AccessMatrixThread(int[][] matrix, int domains, int objects, ObjectOperations fileOperations, String[][] filePathList) {
         this.matrix = matrix;
         this.domains = domains;
         this.objects = objects;
         this.fileOperations = fileOperations;
-        this.filePathList = filePathList;
+        this.objectList = filePathList;
     }
 
     /*

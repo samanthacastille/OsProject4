@@ -8,23 +8,29 @@ public class Main {
 
     public static void main(String[] args){
         int protectionSolution = getUserProtectionSolution();
+        int domains;
+        int objects;
 
         switch (protectionSolution) {
             case (1) -> {
                 System.out.println("You chose to implement protection using an access matrix.");
-                int domains = getRandom(3, 8);
-                int objects = getRandom(3, 8);
+                domains = getRandom(3, 8);
+                objects = getRandom(3, 8);
                 AccessMatrix accessMatrix = new AccessMatrix(domains, objects);
-                FileOperations fileOperations = new FileOperations(objects);
+                ObjectOperations fileOperations = new ObjectOperations(objects);
                 int[][] matrix = accessMatrix.createMatrix();
-                String[] filePathList = fileOperations.createFiles();
-                accessMatrix.forkThreads(domains ,matrix, fileOperations, filePathList);
+                String[][] objectList = fileOperations.createObjects();
+                accessMatrix.forkThreads(domains ,matrix, fileOperations, objectList);
             }
             case (2) -> {
                 System.out.println("You chose to implement protection using an access list for objects.");
+                domains = getRandom(3, 8);
+                objects = getRandom(3, 8);
             }
             case (3) -> {
                 System.out.println("You chose to implement protection using a capabilities list for domains.");
+                domains = getRandom(3, 8);
+                objects = getRandom(3, 8);
             }
         }
     }
