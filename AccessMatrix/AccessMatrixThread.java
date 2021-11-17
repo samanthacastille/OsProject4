@@ -1,15 +1,19 @@
 package com.main.AccessMatrix;
 
-public class AccessMatrixThread extends Thread {
-    int[][] matrix;
-    int domains;
-    int objects;
-    String[] filePathList;
+import com.main.FileOperations;
 
-    public AccessMatrixThread(int[][] matrix, int domains, int objects, String[] filePathList) {
+public class AccessMatrixThread extends Thread {
+    private int[][] matrix;
+    private final int domains;
+    private final int objects;
+    private final FileOperations fileOperations;
+    private final String[] filePathList;
+
+    public AccessMatrixThread(int[][] matrix, int domains, int objects, FileOperations fileOperations, String[] filePathList) {
         this.matrix = matrix;
         this.domains = domains;
         this.objects = objects;
+        this.fileOperations = fileOperations;
         this.filePathList = filePathList;
     }
 
@@ -55,7 +59,7 @@ public class AccessMatrixThread extends Thread {
             accessGranted = objectArbitrator(row, column, action);
             if (accessGranted) {
                 System.out.println("Thread " + row + ": Read access granted!");
-                read();
+                fileOperations.read(column);
             } else {
                 System.out.println("Thread " + row + ": Read access denied.");
             }
@@ -65,7 +69,7 @@ public class AccessMatrixThread extends Thread {
             accessGranted = objectArbitrator(row, column, action);
             if (accessGranted) {
                 System.out.println("Thread " + row + ": Write access granted!");
-                write();
+                fileOperations.write(column);
             } else {
                 System.out.println("Thread " + row + ": Write access denied.");
             }
@@ -81,14 +85,6 @@ public class AccessMatrixThread extends Thread {
     public boolean objectArbitrator(int row, int column, int action) {
         int permission = matrix[row][column];
         return permission == action || permission == 3;
-    }
-
-    public void read() {
-
-    }
-
-    public void write() {
-
     }
 
     /*

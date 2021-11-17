@@ -1,5 +1,7 @@
 package com.main.AccessMatrix;
 
+import com.main.FileOperations;
+
 import java.io.File;
 import java.util.Arrays;
 
@@ -54,27 +56,11 @@ public class AccessMatrix {
         return (int)(Math.random() * (max-min) + min);
     }
 
-    public void forkThreads(int numThreads, int[][] matrix, String[] filePathsList) {
+    public void forkThreads(int numThreads, int[][] matrix, FileOperations fileOperations, String[] filePathsList) {
         for (int i = 0; i < numThreads; i++) {
-            AccessMatrixThread thread = new AccessMatrixThread(matrix, domains, objects, filePathsList);
+            AccessMatrixThread thread = new AccessMatrixThread(matrix, domains, objects, fileOperations, filePathsList);
             thread.setName(Integer.toString(i));
             thread.start();
         }
-    }
-
-
-    public String[] createFile() {
-        String[] list = new String[objects];
-        try {
-            for (int i = 0; i < objects; i++) {
-                File file = File.createTempFile("temp", null);
-                list[i] = file.getAbsolutePath();
-                file.deleteOnExit();
-            }
-        } catch (Exception e) {
-            System.out.println("Error creating files.");
-            System.exit(1);
-        }
-        return list;
     }
 }
