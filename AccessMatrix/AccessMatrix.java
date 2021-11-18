@@ -4,6 +4,7 @@ import com.main.ObjectOperations;
 
 import java.util.Arrays;
 
+// code by Samantha Castille
 public class AccessMatrix {
     private final int domains;
     private final int objects;
@@ -63,3 +64,4 @@ public class AccessMatrix {
         }
     }
 }
+// end code by Samantha Castille

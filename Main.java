@@ -4,6 +4,7 @@ import com.main.AccessMatrix.AccessMatrix;
 
 import java.util.Scanner;
 
+// code by James Thierry
 public class Main {
 
     public static void main(String[] args){
@@ -57,3 +58,4 @@ public class Main {
         return (int)(Math.random() * (max-min) + min);
     }
 }
+// end code by James Thierry

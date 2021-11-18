@@ -2,6 +2,7 @@ package com.main;
 
 import java.util.concurrent.Semaphore;
 
+// code by James Thierry
 public class ObjectOperations {
 
     private final int numFiles;
@@ -70,3 +71,4 @@ public class ObjectOperations {
         return (int)(Math.random() * (max-min) + min);
     }
 }
+// end code by James Thierry

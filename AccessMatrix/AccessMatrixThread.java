@@ -2,6 +2,7 @@ package com.main.AccessMatrix;
 
 import com.main.ObjectOperations;
 
+// code by Samantha Castille
 public class AccessMatrixThread extends Thread {
     private int[][] matrix;
     private final int domains;
@@ -148,3 +149,4 @@ public class AccessMatrixThread extends Thread {
         return (int)(Math.random() * (max-min) + min);
     }
 }
+// end code by Samantha Castille
