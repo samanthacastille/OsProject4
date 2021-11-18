@@ -56,9 +56,9 @@ public class AccessMatrix {
         return (int)(Math.random() * (max-min) + min);
     }
 
-    public void forkThreads(int numThreads, int[][] matrix, ObjectOperations fileOperations, String[] objectList) {
+    public void forkThreads(int numThreads, int[][] matrix, ObjectOperations objectOperations, String[] objectList) {
         for (int i = 0; i < numThreads; i++) {
-            AccessMatrixThread thread = new AccessMatrixThread(matrix, domains, objects, fileOperations, objectList);
+            AccessMatrixThread thread = new AccessMatrixThread(matrix, domains, objects, objectOperations, objectList);
             thread.setName(Integer.toString(i));
             thread.start();
         }

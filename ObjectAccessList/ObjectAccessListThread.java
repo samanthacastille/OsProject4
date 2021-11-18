@@ -1,32 +1,24 @@
-package com.main.AccessMatrix;
+package com.main.ObjectAccessList;
 
 import com.main.ObjectOperations;
 
-// code by Samantha Castille
-public class AccessMatrixThread extends Thread {
-    private int[][] matrix;
+import java.util.LinkedList;
+
+public class ObjectAccessListThread extends Thread {
+    private LinkedList[] objectAccessList;
     private final int domains;
     private final int objects;
     private final ObjectOperations objectOperations;
     private final String[] objectList;
 
-    public AccessMatrixThread(int[][] matrix, int domains, int objects, ObjectOperations fileOperations, String[] objectList) {
-        this.matrix = matrix;
+    public ObjectAccessListThread(LinkedList[] objectAccessList, int domains, int objects, ObjectOperations objectOperations, String[] objectList) {
+        this.objectAccessList = objectAccessList;
         this.domains = domains;
         this.objects = objects;
-        this.objectOperations = fileOperations;
+        this.objectOperations = objectOperations;
         this.objectList = objectList;
     }
 
-    /*
-    RUN
-    randomly decides how many actions a thread will attempt to do
-    for each attempt, if it's trying to access a file, it will send the current thread as the row,
-        and the column number of the file it's trying to access to 'attemptObjectAction'
-    if it's trying to switch domains, it will call 'attemptDomainSwitch' with the current thread
-        as the row, and the column number of the domain it's trying to switch to
-    yields a random number of times after it's done running
-     */
     @Override
     public void run() {
         int currentDomain = Integer.parseInt(Thread.currentThread().getName());
@@ -84,8 +76,9 @@ public class AccessMatrixThread extends Thread {
     checks the matrix to see if it has the exact permission (1/2) or if it's 3 which has both read and write permissions
      */
     public boolean objectArbitrator(int row, int column, int action) {
-        int permission = matrix[row][column];
-        return permission == action || permission == 3;
+        //int permission = matrix[row][column];
+        //return permission == action || permission == 3;
+        return false;
     }
 
     /*
@@ -114,8 +107,9 @@ public class AccessMatrixThread extends Thread {
     checks access matrix to see if the current domain 'row' is allowed to switch to another domain 'column'
      */
     public boolean domainSwitchingArbitrator(int row, int column) {
-        int permission = matrix[row][column];
-        return permission == 1;
+        //int permission = matrix[row][column];
+        //return permission == 1;
+        return false;
     }
 
     /*
@@ -125,8 +119,8 @@ public class AccessMatrixThread extends Thread {
      */
     public void switchDomain(int row, int domain) {
         for (int i=0; i<objects; i++) {
-            int temp = matrix[domain][i];
-            matrix[row][i] = temp;
+            //int temp = matrix[domain][i];
+            //matrix[row][i] = temp;
         }
     }
 
@@ -150,3 +144,4 @@ public class AccessMatrixThread extends Thread {
     }
 }
 // end code by Samantha Castille
+
