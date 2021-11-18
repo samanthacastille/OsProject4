@@ -17,10 +17,10 @@ public class Main {
                 domains = getRandom(3, 8);
                 objects = getRandom(3, 8);
                 AccessMatrix accessMatrix = new AccessMatrix(domains, objects);
-                ObjectOperations fileOperations = new ObjectOperations(objects);
+                ObjectOperations objectOperations = new ObjectOperations(objects);
                 int[][] matrix = accessMatrix.createMatrix();
-                String[][] objectList = fileOperations.createObjects();
-                accessMatrix.forkThreads(domains ,matrix, fileOperations, objectList);
+                String[] objectList = objectOperations.createObjects();
+                accessMatrix.forkThreads(domains ,matrix, objectOperations, objectList);
             }
             case (2) -> {
                 System.out.println("You chose to implement protection using an access list for objects.");

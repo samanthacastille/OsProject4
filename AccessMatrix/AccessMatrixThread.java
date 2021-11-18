@@ -7,14 +7,14 @@ public class AccessMatrixThread extends Thread {
     private final int domains;
     private final int objects;
     private final ObjectOperations fileOperations;
-    private final String[][] objectList;
+    private final String[] objectList;
 
-    public AccessMatrixThread(int[][] matrix, int domains, int objects, ObjectOperations fileOperations, String[][] filePathList) {
+    public AccessMatrixThread(int[][] matrix, int domains, int objects, ObjectOperations fileOperations, String[] objectList) {
         this.matrix = matrix;
         this.domains = domains;
         this.objects = objects;
         this.fileOperations = fileOperations;
-        this.objectList = filePathList;
+        this.objectList = objectList;
     }
 
     /*
