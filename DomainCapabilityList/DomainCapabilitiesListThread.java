@@ -40,6 +40,7 @@ public class DomainCapabilitiesListThread extends Thread {
                 }
                 attemptDomainSwitch(currentDomain, objectOrDomain);
             }
+            yieldMultipleTimes();
         }
     }
 
@@ -141,6 +142,17 @@ public class DomainCapabilitiesListThread extends Thread {
             }
         }
         domainCapabilitiesSemaphore[0].release();
+    }
+
+    /*
+    YIELD MULTIPLE TIMES
+    */
+    public void yieldMultipleTimes() {
+        int numYields = getRandom(3,8);
+        System.out.println("Thread " + Thread.currentThread().getName() + ": Yielding " + numYields + " times.");
+        for (int i = 0; i<numYields; i++) {
+            Thread.yield();
+        }
     }
     
     /*
