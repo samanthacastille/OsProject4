@@ -3,6 +3,7 @@ package com.main;
 import com.main.AccessMatrix.AccessMatrix;
 import com.main.ObjectAccessList.ObjectAccessList;
 
+import java.util.LinkedList;
 import java.util.Scanner;
 
 // code by James Thierry
@@ -29,7 +30,8 @@ public class Main {
                 domains = getRandom(3, 8);
                 objects = getRandom(3, 8);
                 ObjectAccessList objectAccessList = new ObjectAccessList(domains, objects);
-                objectAccessList.createObjectAccessList();
+                LinkedList[] list = objectAccessList.createObjectAccessList();
+                objectAccessList.forkThreads(domains, list);
             }
             case (3) -> {
                 System.out.println("You chose to implement protection using a capabilities list for domains.");
