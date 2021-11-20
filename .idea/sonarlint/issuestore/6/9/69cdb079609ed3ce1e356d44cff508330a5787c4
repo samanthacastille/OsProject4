@@ -1,16 +1,0 @@
-
-V
-java:S1854%";Remove this useless assignment to local variable "objects".(£¢ìÁûÿÿÿÿ
-V
-java:S1854$";Remove this useless assignment to local variable "domains".(èØ³üÿÿÿÿ
-<	java:S131""Add a default case to this switch.(ÖõĞçûÿÿÿÿ
-S	java:S106"9Replace this use of System.out or System.err by a logger.(¨à¡¸øÿÿÿÿ
-S	java:S106"9Replace this use of System.out or System.err by a logger.(‹ùèşÿÿÿÿ
-N	java:S106#"9Replace this use of System.out or System.err by a logger.(­«Êè
-N	java:S106-"9Replace this use of System.out or System.err by a logger.(üğ©»
-S	java:S1061"9Replace this use of System.out or System.err by a logger.(Õ¬û¼ıÿÿÿÿ
-N	java:S1065"9Replace this use of System.out or System.err by a logger.(“õ¾Ò
-?
-java:S2140=")Use "java.util.Random.nextInt()" instead.(ĞÅï
-‡
-java:S1598"lThis file "Main.java" should be located in "com/main" directory, not in "/home/samantha/sandbox/OsProject4".(‚ÚâÒûÿÿÿÿ
