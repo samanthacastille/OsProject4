@@ -1,5 +1,8 @@
 package com.main.ObjectAccessList;
 
+import com.main.AccessMatrix.AccessMatrixThread;
+import com.main.ObjectOperations;
+
 import java.util.HashMap;
 import java.util.LinkedList;
 
@@ -52,12 +55,22 @@ public class ObjectAccessList {
             }
         }
         for (int i=0; i<outerListLength; i++) {
-            System.out.println(objectAccessList[i].toString());
+            if (i<objects) {
+                System.out.println("Object " + i + ": " + objectAccessList[i].toString());
+            } else {
+                System.out.println("Domain " + (i-objects) + ": " + objectAccessList[i].toString());
+            }
         }
+        System.out.println("\n");
         return objectAccessList;
     }
 
-    public void forkThreads(int numThreads, LinkedList[] list) {
+    public void forkThreads(int numThreads, LinkedList[] objectAccessList, int domains, int objects, ObjectOperations objectOperations, String[] objectList) {
+        for (int i = 0; i < numThreads; i++) {
+            ObjectAccessListThread thread = new ObjectAccessListThread(objectAccessList, domains, objects, objectOperations, objectList);
+            thread.setName(Integer.toString(i));
+            thread.start();
+        }
 
 
     }

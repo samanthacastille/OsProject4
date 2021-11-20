@@ -2,6 +2,7 @@ package com.main.ObjectAccessList;
 
 import com.main.ObjectOperations;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 
 public class ObjectAccessListThread extends Thread {
@@ -72,13 +73,12 @@ public class ObjectAccessListThread extends Thread {
 
     /*
     OBJECT ARBITRATOR
-    takes in the current domain as the row, the object being written/read from as the column, and the action attempted
-    checks the matrix to see if it has the exact permission (1/2) or if it's 3 which has both read and write permissions
+
      */
     public boolean objectArbitrator(int row, int column, int action) {
-        //int permission = matrix[row][column];
-        //return permission == action || permission == 3;
-        return false;
+        HashMap<Integer, Integer> map = new HashMap<>();
+        map.put(row, action);
+        return objectAccessList[column].contains(map);
     }
 
     /*
@@ -107,9 +107,9 @@ public class ObjectAccessListThread extends Thread {
     checks access matrix to see if the current domain 'row' is allowed to switch to another domain 'column'
      */
     public boolean domainSwitchingArbitrator(int row, int column) {
-        //int permission = matrix[row][column];
-        //return permission == 1;
-        return false;
+        HashMap<Integer, Integer> map = new HashMap<>();
+        map.put(row, 1);
+        return objectAccessList[column].contains(map);
     }
 
     /*
@@ -118,10 +118,7 @@ public class ObjectAccessListThread extends Thread {
         the current domains values to match them (only the permissions relating to read/write to files)
      */
     public void switchDomain(int row, int domain) {
-        for (int i=0; i<objects; i++) {
-            //int temp = matrix[domain][i];
-            //matrix[row][i] = temp;
-        }
+                
     }
 
     /*
