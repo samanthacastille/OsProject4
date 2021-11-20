@@ -2,21 +2,26 @@ package com.main.ObjectAccessList;
 
 import com.main.ObjectOperations;
 
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.concurrent.Semaphore;
 
+// code by Samantha Castille
 public class ObjectAccessListThread extends Thread {
     private LinkedList[] objectAccessList;
     private final int domains;
     private final int objects;
     private final ObjectOperations objectOperations;
     private final String[] objectList;
+    private final Semaphore[] objectAccessListSemaphore;
 
-    public ObjectAccessListThread(LinkedList[] objectAccessList, int domains, int objects, ObjectOperations objectOperations, String[] objectList) {
+    public ObjectAccessListThread(LinkedList[] objectAccessList, int domains, int objects, ObjectOperations objectOperations, String[] objectList, Semaphore[] objectAccessListSemaphore) {
         this.objectAccessList = objectAccessList;
         this.domains = domains;
         this.objects = objects;
         this.objectOperations = objectOperations;
         this.objectList = objectList;
+        this.objectAccessListSemaphore = objectAccessListSemaphore;
     }
 
     @Override
@@ -56,7 +61,6 @@ public class ObjectAccessListThread extends Thread {
             } else {
                 System.out.println("Thread " + row + ": Read access denied.");
             }
-            yieldMultipleTimes();
         } else if (action==2) {
             System.out.println("Thread " + row + ": Attempting to write to object " + column);
             accessGranted = objectArbitrator(row, column, action);
@@ -66,19 +70,17 @@ public class ObjectAccessListThread extends Thread {
             } else {
                 System.out.println("Thread " + row + ": Write access denied.");
             }
-            yieldMultipleTimes();
         }
     }
 
     /*
     OBJECT ARBITRATOR
-    takes in the current domain as the row, the object being written/read from as the column, and the action attempted
-    checks the matrix to see if it has the exact permission (1/2) or if it's 3 which has both read and write permissions
+
      */
     public boolean objectArbitrator(int row, int column, int action) {
-        //int permission = matrix[row][column];
-        //return permission == action || permission == 3;
-        return false;
+        HashMap<Integer, Integer> map = new HashMap<>();
+        map.put(row, action);
+        return objectAccessList[column].contains(map);
     }
 
     /*
@@ -99,7 +101,6 @@ public class ObjectAccessListThread extends Thread {
         } else {
             System.out.println("Thread " + row + ": Domain switch access denied.");
         }
-        yieldMultipleTimes();
     }
 
     /*
@@ -107,9 +108,9 @@ public class ObjectAccessListThread extends Thread {
     checks access matrix to see if the current domain 'row' is allowed to switch to another domain 'column'
      */
     public boolean domainSwitchingArbitrator(int row, int column) {
-        //int permission = matrix[row][column];
-        //return permission == 1;
-        return false;
+        HashMap<Integer, Integer> map = new HashMap<>();
+        map.put(row, 1);
+        return objectAccessList[column].contains(map);
     }
 
     /*
@@ -117,22 +118,35 @@ public class ObjectAccessListThread extends Thread {
     take the permissions row values from the domain we are trying to switch to and update
         the current domains values to match them (only the permissions relating to read/write to files)
      */
-    public void switchDomain(int row, int domain) {
-        for (int i=0; i<objects; i++) {
-            //int temp = matrix[domain][i];
-            //matrix[row][i] = temp;
+    public void switchDomain(int currentDomain, int switchToDomain) {
+        try {
+            objectAccessListSemaphore[0].acquire();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
-    }
+        for (int i=0; i<objects; i++) {                                 // i is the outer list of objects
 
-    /*
-    YIELD MULTIPLE TIMES
-     */
-    public void yieldMultipleTimes() {
-        int numYields = getRandom(3,8);
-        System.out.println("Thread " + Thread.currentThread().getName() + ": Yielding " + numYields + " times.");
-        for (int i = 0; i<numYields; i++) {
-            Thread.yield();
+            // remove old permissions of the current domain
+            for (int j=1; j<4; j++) {                                   // j is permissions
+                HashMap<Integer, Integer> map = new HashMap<>();
+                map.put(currentDomain, j);
+                if (objectAccessList[i].contains(map)) {
+                    objectAccessList[i].remove(map);
+                }
+            }
+
+            // add new permissions with current domain
+            for (int j=1; j<4; j++) {                                   // j is permissions
+                HashMap<Integer, Integer> map = new HashMap<>();
+                map.put(switchToDomain, j);
+                if (objectAccessList[i].contains(map)) {
+                    HashMap<Integer, Integer> map1 = new HashMap<>();
+                    map1.put(currentDomain, j);
+                    objectAccessList[i].add(map1);
+                }
+            }
         }
+        objectAccessListSemaphore[0].release();
     }
 
     /*
