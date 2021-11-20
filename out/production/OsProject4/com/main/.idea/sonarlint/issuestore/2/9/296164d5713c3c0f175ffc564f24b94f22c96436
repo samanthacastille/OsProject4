@@ -1,0 +1,15 @@
+
+—
+java:S11869"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(¼¿®Ó
+h
+java:S3776"RRefactor this method to reduce its Cognitive Complexity from 16 to the 15 allowed.(©ÃåØ
+S	java:S106"9Replace this use of System.out or System.err by a logger.(µ©ûúÿÿÿÿ
+S	java:S106"9Replace this use of System.out or System.err by a logger.(¬şæ·ıÿÿÿÿ
+M
+java:S6126"2Replace this String concatenation with Text block.(¬şæ·ıÿÿÿÿ
+N	java:S1065"9Replace this use of System.out or System.err by a logger.(…ôã¶
+?
+java:S2140>")Use "java.util.Random.nextInt()" instead.(ĞÅï
+±
+java:S1598"šThis file "ObjectAccessList.java" should be located in "com/main/ObjectAccessList" directory, not in "/home/samantha/sandbox/OsProject4/ObjectAccessList".(·Í˜
+o	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(·Í˜
