@@ -43,12 +43,13 @@ public class ObjectOperations {
             e.printStackTrace();
         }
         String readString = objectList[objectIndex];
-        semaphoreList[objectIndex].release();
         if (readString==null) {
             System.out.println("Thread " + Thread.currentThread().getName() + ": Tried to read from object " + objectIndex + " but it was empty.");
         } else {
             System.out.println("Thread " + Thread.currentThread().getName() + ": Read '" + readString + "' from object " + objectIndex);
         }
+        yieldMultipleTimes();
+        semaphoreList[objectIndex].release();
     }
 
     public void write(int objectIndex) {
@@ -63,8 +64,20 @@ public class ObjectOperations {
         } else {
             objectList[objectIndex] += random;
         }
-        semaphoreList[objectIndex].release();
         System.out.println("Thread " + Thread.currentThread().getName() + ": Wrote '" + random + "' to object " + objectIndex);
+        yieldMultipleTimes();
+        semaphoreList[objectIndex].release();
+    }
+
+    /*
+YIELD MULTIPLE TIMES
+ */
+    public void yieldMultipleTimes() {
+        int numYields = getRandom(3,8);
+        System.out.println("Thread " + Thread.currentThread().getName() + ": Yielding " + numYields + " times.");
+        for (int i = 0; i<numYields; i++) {
+            Thread.yield();
+        }
     }
 
     public int getRandom(int min, int max) {
