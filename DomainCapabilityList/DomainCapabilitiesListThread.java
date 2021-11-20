@@ -2,21 +2,26 @@ package com.main.DomainCapabilityList;
 
 import com.main.ObjectOperations;
 
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.concurrent.Semaphore;
 
+// code by Samantha Castille
 public class DomainCapabilitiesListThread extends Thread {
     private LinkedList[] domainCapabilitiesList;
     private final int domains;
     private final int objects;
     private final ObjectOperations objectOperations;
     private final String[] objectList;
+    private final Semaphore[] domainCapabilitiesSemaphore;
 
-    public DomainCapabilitiesListThread(LinkedList[] domainCapabilitiesList, int domains, int objects, ObjectOperations objectOperations, String[] objectList) {
+    public DomainCapabilitiesListThread(LinkedList[] domainCapabilitiesList, int domains, int objects, ObjectOperations objectOperations, String[] objectList, Semaphore[] domainCapabilitiesSemaphore) {
         this.domainCapabilitiesList = domainCapabilitiesList;
         this.domains = domains;
         this.objects = objects;
         this.objectOperations = objectOperations;
         this.objectList = objectList;
+        this.domainCapabilitiesSemaphore = domainCapabilitiesSemaphore;
     }
 
     @Override
@@ -76,9 +81,9 @@ public class DomainCapabilitiesListThread extends Thread {
     checks the matrix to see if it has the exact permission (1/2) or if it's 3 which has both read and write permissions
      */
     public boolean objectArbitrator(int row, int column, int action) {
-        //int permission = matrix[row][column];
-        //return permission == action || permission == 3;
-        return false;
+        HashMap<Integer, Integer> map = new HashMap<>();
+        map.put(column, action);
+        return domainCapabilitiesList[row].contains(map);
     }
 
     /*
@@ -107,9 +112,9 @@ public class DomainCapabilitiesListThread extends Thread {
     checks access matrix to see if the current domain 'row' is allowed to switch to another domain 'column'
      */
     public boolean domainSwitchingArbitrator(int row, int column) {
-        //int permission = matrix[row][column];
-        //return permission == 1;
-        return false;
+        HashMap<Integer, Integer> map = new HashMap<>();
+        map.put(column, 1);
+        return domainCapabilitiesList[row].contains(map);
     }
 
     /*
@@ -117,11 +122,28 @@ public class DomainCapabilitiesListThread extends Thread {
     take the permissions row values from the domain we are trying to switch to and update
         the current domains values to match them (only the permissions relating to read/write to files)
      */
-    public void switchDomain(int row, int domain) {
-        for (int i=0; i<objects; i++) {
-            //int temp = matrix[domain][i];
-            //matrix[row][i] = temp;
+    public void switchDomain(int currentDomain, int switchToDomain) {
+        try {
+            domainCapabilitiesSemaphore[0].acquire();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
+
+        for (int j=0; j<objects; j++) {                                             // j is the objects
+            for (int k=1; k<4; k++) {                                               // k is permissions for objects
+                HashMap<Integer, Integer> map = new HashMap<>();
+                map.put(j, k);
+                // remove old object permissions from current domain
+                if (domainCapabilitiesList[currentDomain].contains(map)) {
+                    domainCapabilitiesList[currentDomain].remove(map);
+                }
+                // add new object permissions to current domain
+                if (domainCapabilitiesList[switchToDomain].contains(map)) {
+                    domainCapabilitiesList[currentDomain].add(map);
+                }
+            }
+        }
+        domainCapabilitiesSemaphore[0].release();
     }
 
     /*
@@ -142,5 +164,6 @@ public class DomainCapabilitiesListThread extends Thread {
     public static int getRandom(int min, int max) {
         return (int)(Math.random() * (max-min) + min);
     }
-
 }
+
+// end code by Samantha Castille

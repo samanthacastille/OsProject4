@@ -4,6 +4,7 @@ import com.main.AccessMatrix.AccessMatrix;
 import com.main.DomainCapabilityList.DomainCapabilitiesList;
 import com.main.ObjectAccessList.ObjectAccessList;
 
+import java.util.LinkedList;
 import java.util.Scanner;
 
 // code by James Thierry
@@ -38,8 +39,10 @@ public class Main {
                 domains = getRandom(3, 8);
                 objects = getRandom(3, 8);
                 DomainCapabilitiesList domainCapabilitiesList = new DomainCapabilitiesList(domains, objects);
-                domainCapabilitiesList.createDomainCapabilitiesList();
-                domainCapabilitiesList.forkThreads(domains);
+                LinkedList[] list = domainCapabilitiesList.createDomainCapabilitiesList();
+                ObjectOperations objectOperations = new ObjectOperations(objects);
+                String[] objectList = objectOperations.createObjects();
+                domainCapabilitiesList.forkThreads(domains, list, domains, objects, objectOperations, objectList);
             }
         }
     }
