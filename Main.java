@@ -1,6 +1,7 @@
 package com.main;
 
 import com.main.AccessMatrix.AccessMatrix;
+import com.main.DomainCapabilityList.DomainCapabilitiesList;
 import com.main.ObjectAccessList.ObjectAccessList;
 
 import java.util.Scanner;
@@ -30,11 +31,15 @@ public class Main {
                 objects = getRandom(3, 8);
                 ObjectAccessList objectAccessList = new ObjectAccessList(domains, objects);
                 objectAccessList.createObjectAccessList();
+                objectAccessList.forkThreads(domains);
             }
             case (3) -> {
                 System.out.println("You chose to implement protection using a capabilities list for domains.");
                 domains = getRandom(3, 8);
                 objects = getRandom(3, 8);
+                DomainCapabilitiesList domainCapabilitiesList = new DomainCapabilitiesList(domains, objects);
+                domainCapabilitiesList.createDomainCapabilitiesList();
+                domainCapabilitiesList.forkThreads(domains);
             }
         }
     }
