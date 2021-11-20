@@ -52,7 +52,8 @@ public class Main {
     public static int getUserProtectionSolution() {
         Scanner input = new Scanner(System.in);
         int protectionSolution;
-        System.out.println("Which would you prefer? (1/2/3)");
+        System.out.println("Which protection implementation solution would you prefer? (1/2/3)\n"
+        + "1 - Access Matrix\n2 - Access List for Objects\n3 - Capability List for Domains");
         try {
             protectionSolution = input.nextInt();
             while ((protectionSolution<1) || (protectionSolution>3)) {
