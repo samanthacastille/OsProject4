@@ -2,6 +2,8 @@ package com.main.AccessMatrix;
 
 import com.main.ObjectOperations;
 
+import java.util.concurrent.Semaphore;
+
 // code by Samantha Castille
 public class AccessMatrixThread extends Thread {
     private int[][] matrix;
@@ -9,13 +11,15 @@ public class AccessMatrixThread extends Thread {
     private final int objects;
     private final ObjectOperations objectOperations;
     private final String[] objectList;
+    private final Semaphore[] accessMatrixSemaphore;
 
-    public AccessMatrixThread(int[][] matrix, int domains, int objects, ObjectOperations fileOperations, String[] objectList) {
+    public AccessMatrixThread(int[][] matrix, int domains, int objects, ObjectOperations fileOperations, String[] objectList, Semaphore[] accessMatrixSemaphore) {
         this.matrix = matrix;
         this.domains = domains;
         this.objects = objects;
         this.objectOperations = fileOperations;
         this.objectList = objectList;
+        this.accessMatrixSemaphore = accessMatrixSemaphore;
     }
 
     /*
@@ -64,7 +68,6 @@ public class AccessMatrixThread extends Thread {
             } else {
                 System.out.println("Thread " + row + ": Read access denied.");
             }
-            yieldMultipleTimes();
         } else if (action==2) {
             System.out.println("Thread " + row + ": Attempting to write to object " + column);
             accessGranted = objectArbitrator(row, column, action);
@@ -74,7 +77,6 @@ public class AccessMatrixThread extends Thread {
             } else {
                 System.out.println("Thread " + row + ": Write access denied.");
             }
-            yieldMultipleTimes();
         }
     }
 
@@ -106,7 +108,6 @@ public class AccessMatrixThread extends Thread {
         } else {
             System.out.println("Thread " + row + ": Domain switch access denied.");
         }
-        yieldMultipleTimes();
     }
 
     /*
@@ -124,21 +125,16 @@ public class AccessMatrixThread extends Thread {
         the current domains values to match them (only the permissions relating to read/write to files)
      */
     public void switchDomain(int row, int domain) {
+        try {
+            accessMatrixSemaphore[0].acquire();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         for (int i=0; i<objects; i++) {
             int temp = matrix[domain][i];
             matrix[row][i] = temp;
         }
-    }
-
-    /*
-    YIELD MULTIPLE TIMES
-     */
-    public void yieldMultipleTimes() {
-        int numYields = getRandom(3,8);
-        System.out.println("Thread " + Thread.currentThread().getName() + ": Yielding " + numYields + " times.");
-        for (int i = 0; i<numYields; i++) {
-            Thread.yield();
-        }
+        accessMatrixSemaphore[0].release();
     }
 
     /*

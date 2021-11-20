@@ -3,11 +3,13 @@ package com.main.AccessMatrix;
 import com.main.ObjectOperations;
 
 import java.util.Arrays;
+import java.util.concurrent.Semaphore;
 
 // code by Samantha Castille
 public class AccessMatrix {
     private final int domains;
     private final int objects;
+    private Semaphore[] accessMatrixSemaphore;
 
     public AccessMatrix(int domains, int objects) {
         this.domains = domains;
@@ -26,7 +28,9 @@ public class AccessMatrix {
     2 - Not Allowed
      */
     public int[][] createMatrix() {
-        System.out.println("An access matrix with " + domains + " domains and " + objects +  " objects is being created!");
+        accessMatrixSemaphore = new Semaphore[1];
+        accessMatrixSemaphore[0] = new Semaphore(1);
+        System.out.println("\nAn access matrix with " + domains + " domains and " + objects +  " objects is being created!");
         System.out.println("\nFor the File objects, permissions are:\n1 - Read\n2 - Write\n3 - Read/Write\n4 - None\n\n"
                 + "For the domain switching, permissions are:\n0 - Already in that domain\n1 - Allowed\n2 - Not Allowed\n");
         int[][] matrix = new int[domains][objects+domains];
@@ -45,8 +49,8 @@ public class AccessMatrix {
                 matrix[i][j] = permission;
             }
         }
-        for (int[] strings : matrix) {
-            System.out.println(Arrays.toString(strings));
+        for (int i=0; i<domains; i++) {
+            System.out.println("Domain: " + i + " " + Arrays.toString(matrix[i]));
         }
         System.out.println();
         return matrix;
@@ -58,7 +62,7 @@ public class AccessMatrix {
 
     public void forkThreads(int numThreads, int[][] matrix, ObjectOperations objectOperations, String[] objectList) {
         for (int i = 0; i < numThreads; i++) {
-            AccessMatrixThread thread = new AccessMatrixThread(matrix, domains, objects, objectOperations, objectList);
+            AccessMatrixThread thread = new AccessMatrixThread(matrix, domains, objects, objectOperations, objectList, accessMatrixSemaphore);
             thread.setName(Integer.toString(i));
             thread.start();
         }
