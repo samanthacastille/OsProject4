@@ -61,7 +61,6 @@ public class DomainCapabilitiesListThread extends Thread {
             } else {
                 System.out.println("Thread " + row + ": Read access denied.");
             }
-            yieldMultipleTimes();
         } else if (action==2) {
             System.out.println("Thread " + row + ": Attempting to write to object " + column);
             accessGranted = objectArbitrator(row, column, action);
@@ -71,7 +70,6 @@ public class DomainCapabilitiesListThread extends Thread {
             } else {
                 System.out.println("Thread " + row + ": Write access denied.");
             }
-            yieldMultipleTimes();
         }
     }
 
@@ -104,7 +102,6 @@ public class DomainCapabilitiesListThread extends Thread {
         } else {
             System.out.println("Thread " + row + ": Domain switch access denied.");
         }
-        yieldMultipleTimes();
     }
 
     /*
@@ -145,18 +142,7 @@ public class DomainCapabilitiesListThread extends Thread {
         }
         domainCapabilitiesSemaphore[0].release();
     }
-
-    /*
-    YIELD MULTIPLE TIMES
-     */
-    public void yieldMultipleTimes() {
-        int numYields = getRandom(3,8);
-        System.out.println("Thread " + Thread.currentThread().getName() + ": Yielding " + numYields + " times.");
-        for (int i = 0; i<numYields; i++) {
-            Thread.yield();
-        }
-    }
-
+    
     /*
     GET RANDOM
     generate a random number in a provided range, not inclusive of the upper bound
